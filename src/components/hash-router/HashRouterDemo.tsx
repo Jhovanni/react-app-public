@@ -25,6 +25,9 @@ const pages: Page[] = [
   },
 ];
 
+/**
+ * Simple hash router demo with basic pages
+ */
 export default function HashRouterDemo() {
   return <HashRouter pages={pages} />;
 }
