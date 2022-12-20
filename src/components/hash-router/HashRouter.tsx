@@ -6,7 +6,7 @@ import useHashIndex from "./useHashIndex";
  */
 export interface Page {
   /**
-   * string to link the page to the window's hash, without '#' character
+   * page's anchor for hash navigation, without '#' character
    */
   hash: string;
   content: React.ReactNode;
