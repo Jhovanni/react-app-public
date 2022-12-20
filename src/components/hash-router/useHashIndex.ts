@@ -1,34 +1,31 @@
 import { Page } from "./HashRouter";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Returns the stateful index of a page, whose hash field correlates with the browser's hash
  */
 export default function useHashIndex(pages: Page[]): number {
-  /**
-   * Returns the index of the page whose hash = window.location.hash,
-   * 0 if no match is found
-   */
-  const getHashIndex = useCallback((): number => {
-    const hash = window.location.hash;
-    let hashIndex = pages.findIndex((page) => `#${page.hash}` === hash);
-    if (hashIndex < 0) {
-      hashIndex = 0;
-    }
-    return hashIndex;
-  }, [pages]);
-
-  const [hashIndex, setHashIndex] = useState(getHashIndex());
+  const [hashIndex, setHashIndex] = useState(getHashIndex(pages));
 
   /**
    * Register/remove a hashchange listener on mount/unmount
    */
   useEffect(() => {
-    const handleHashchange = () => setHashIndex(getHashIndex());
+    const handleHashchange = () => setHashIndex(getHashIndex(pages));
 
     window.addEventListener("hashchange", handleHashchange);
     return () => window.removeEventListener("hashchange", handleHashchange);
-  }, [getHashIndex]);
+  }, [pages]);
 
   return hashIndex;
+}
+
+/**
+ * Returns the index of the page whose hash = window.location.hash, 0 if no match is found
+ * @param pages set of pages to search for a matching hash
+ */
+function getHashIndex(pages: Page[]) {
+  const hash = window.location.hash;
+  const hashIndex = pages.findIndex((page) => `#${page.hash}` === hash);
+  return hashIndex < 0 ? 0 : hashIndex;
 }

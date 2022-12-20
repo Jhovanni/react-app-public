@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import useHashIndex from "./useHashIndex";
+import Section from "./Section";
 
 /**
  * A page element to displayed via {@link HashRouter}
@@ -34,15 +35,24 @@ export default function HashRouter({ pages }: Props) {
     [hashIndex]
   );
 
+  function handleIntersect(index: number) {
+    if (index !== hashIndex) {
+      window.location.hash = pages[index].hash;
+    }
+  }
+
   return (
     <main
       ref={mainRef}
       className="h-screen overflow-y-auto snap-y snap-mandatory"
     >
       {pages.map((page, index) => (
-        <section key={index} className="snap-start">
-          {page.content}
-        </section>
+        <Section
+          key={index}
+          onIntersect={() => handleIntersect(index)}
+          page={page}
+          className="snap-start"
+        />
       ))}
     </main>
   );
