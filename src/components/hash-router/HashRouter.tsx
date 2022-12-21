@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from "react";
 import useHashIndex from "./useHashIndex";
 import Section from "./Section";
+import { useScrollTo } from "./useScrollTo";
+import Navbar from "./Navbar";
 
 /**
  * A page element to displayed via {@link HashRouter}
  */
 export interface Page {
   /**
-   * page's anchor for hash navigation, without '#' character
+   * Label to use for links
+   */
+  label: string;
+  /**
+   * The page's anchor for hash navigation, without '#' character
    */
   hash: string;
   content: React.ReactNode;
@@ -23,20 +29,15 @@ type Props = {
 export default function HashRouter({ pages }: Props) {
   const hashIndex = useHashIndex(pages);
   const mainRef = useRef<HTMLElement>(null);
+  const { scrolling, scrollTo } = useScrollTo();
 
   /**
    * Scroll to section whose index = hashIndex when it changes
    */
-  useEffect(
-    () =>
-      mainRef.current?.children[hashIndex].scrollIntoView({
-        behavior: "smooth",
-      }),
-    [hashIndex]
-  );
+  useEffect(() => scrollTo(mainRef.current?.children[hashIndex]), [hashIndex]);
 
   function handleIntersect(index: number) {
-    if (index !== hashIndex) {
+    if (index !== hashIndex && !scrolling) {
       window.location.hash = pages[index].hash;
     }
   }
