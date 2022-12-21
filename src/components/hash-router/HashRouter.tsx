@@ -28,15 +28,21 @@ type Props = {
  */
 export default function HashRouter({ pages }: Props) {
   const hashIndex = useHashIndex(pages);
+  const intersectingIndex = useRef(0);
   const mainRef = useRef<HTMLElement>(null);
   const { scrolling, scrollTo } = useScrollTo();
 
   /**
-   * Scroll to section whose index = hashIndex when it changes
+   * Scroll to section hashIndex section if it is not visible already
    */
-  useEffect(() => scrollTo(mainRef.current?.children[hashIndex]), [hashIndex]);
+  useEffect(() => {
+    if (intersectingIndex.current !== hashIndex) {
+      scrollTo(mainRef.current?.children[hashIndex]);
+    }
+  }, [hashIndex]);
 
   function handleIntersect(index: number) {
+    intersectingIndex.current = index;
     if (index !== hashIndex && !scrolling) {
       window.location.hash = pages[index].hash;
     }

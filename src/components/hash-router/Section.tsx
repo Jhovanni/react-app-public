@@ -25,7 +25,7 @@ export default function Section({ className = "", onIntersect, page }: Props) {
     if (sectionRef.current) {
       setIntersectTarget(sectionRef.current);
     }
-  }, []);
+  }, [setIntersectTarget]);
 
   /**
    * When section is intersecting, notify the parent
@@ -34,7 +34,7 @@ export default function Section({ className = "", onIntersect, page }: Props) {
     if (intersecting) {
       onIntersect();
     }
-  }, [intersecting]);
+  }, [intersecting, setIntersectTarget]);
 
   return (
     <section ref={sectionRef} className={className}>

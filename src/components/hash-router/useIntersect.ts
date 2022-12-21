@@ -28,7 +28,7 @@ export const useIntersect = (percentage: number = 1): IntersectObject => {
   const observer = useRef<IntersectionObserver>();
 
   /**
-   * Whenever the target, viewport dimensions or required intersect percentage changes,
+   * Whenever the target, viewport or intersect percentage changes,
    * set an observer for the target intersection with the viewport
    */
   useEffect(() => {
