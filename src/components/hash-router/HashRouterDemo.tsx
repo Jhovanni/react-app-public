@@ -38,7 +38,7 @@ const pages: Page[] = [
 export default function HashRouterDemo() {
   return (
     <>
-      <Navbar pages={pages} className="text-white" />
+      <Navbar pages={pages} className="bg-black text-white" />
       <HashRouter pages={pages} />
     </>
   );

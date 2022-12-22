@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import useHashIndex from "./useHashIndex";
 import Section from "./Section";
 import { useScrollTo } from "./useScrollTo";
-import Navbar from "./Navbar";
 
 /**
  * A page element to displayed via {@link HashRouter}
@@ -28,22 +27,23 @@ type Props = {
  */
 export default function HashRouter({ pages }: Props) {
   const hashIndex = useHashIndex(pages);
-  const intersectingIndex = useRef(0);
   const mainRef = useRef<HTMLElement>(null);
   const { scrolling, scrollTo } = useScrollTo();
 
   /**
    * Scroll to section hashIndex section if it is not visible already
    */
-  useEffect(() => {
-    if (intersectingIndex.current !== hashIndex) {
-      scrollTo(mainRef.current?.children[hashIndex]);
-    }
-  }, [hashIndex]);
+  useEffect(
+    () => scrollTo(mainRef.current?.children[hashIndex]),
+    [hashIndex, scrollTo]
+  );
 
+  /**
+   * Change window hash when auto-scrolling is off and intersecting section != hashIndex
+   * @param index index of the intersecting section
+   */
   function handleIntersect(index: number) {
-    intersectingIndex.current = index;
-    if (index !== hashIndex && !scrolling) {
+    if (!scrolling && index !== hashIndex) {
       window.location.hash = pages[index].hash;
     }
   }
