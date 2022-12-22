@@ -16,7 +16,7 @@ type Props = {
  */
 export default function Section({ className = "", onIntersect, page }: Props) {
   const sectionRef = useRef(null);
-  const { intersecting, setIntersectTarget } = useIntersect(0.99);
+  const { intersecting, setIntersectTarget } = useIntersect(0.9);
 
   /**
    * Set section as intersecting target
@@ -34,7 +34,9 @@ export default function Section({ className = "", onIntersect, page }: Props) {
     if (intersecting) {
       onIntersect();
     }
-  }, [intersecting, onIntersect]);
+    // exclude onIntersect from deps, so it doesn't report the same intersecting state every time the parent is render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [intersecting]);
 
   return (
     <section ref={sectionRef} className={className}>
